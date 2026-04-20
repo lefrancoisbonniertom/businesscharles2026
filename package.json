@@ -1,0 +1,20 @@
+{
+  "name": "charles-performance-store",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "printful:map": "node scripts/generate-printful-map.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "stripe": "^17.5.0"
+  }
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spinor Shop</title>
+    <meta
+      name="description"
+      content="Boutique e-commerce sportswear paddle: tshirts, joggings et pulls techniques."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img src="IMG/Logo.png" alt="Logo Spinor Shop" class="brand-logo" />
+        <div>
+          <p class="brand-overline">Spinor Shop</p>
+          <h1>Spinor Shop</h1>
+        </div>
+      </div>
+
+      <button id="cart-button" class="cart-button" aria-label="Ouvrir le panier">
+        Panier
+        <span id="cart-count">0</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Collection Match Ready</p>
+          <h2>Sportswear paddle propre, technique et premium</h2>
+          <p>
+            Des pièces pensées pour le jeu: tissus respirants, coupes actives,
+            et style net sur le court comme en dehors.
+          </p>
+          <div class="hero-tags">
+            <span>Respirant</span>
+            <span>Stretch</span>
+            <span>Anti frottement</span>
+            <span>Club look</span>
+          </div>
+        </div>
+        <div class="hero-kpis">
+          <article>
+            <p>Livraison</p>
+            <strong>48H</strong>
+          </article>
+          <article>
+            <p>Retour</p>
+            <strong>30 J</strong>
+          </article>
+          <article>
+            <p>Note clients</p>
+            <strong>4.9/5</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Filtres catalogue">
+        <label for="category-filter">Catégorie</label>
+        <select id="category-filter">
+          <option value="all">Tout voir</option>
+          <option value="tshirt">Tshirt</option>
+          <option value="jogging">Jogging</option>
+          <option value="pull">Pull</option>
+          <option value="bouteille">Bouteille</option>
+        </select>
+      </section>
+
+      <section>
+        <div id="products-grid" class="products-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="contact-social" id="contact" aria-label="Contact et reseaux sociaux">
+        <div class="contact-card">
+          <p class="eyebrow">Contact</p>
+          <h3>Une question sur une commande ou un produit ?</h3>
+          <p>
+            Ecrivez-nous directement via ce formulaire. Notre équipe revient vers vous
+            rapidement.
+          </p>
+
+          <form
+            class="contact-form"
+            action="mailto:teamspinor@gmail.com"
+            method="post"
+            enctype="text/plain"
+          >
+            <label for="contact-name">Nom</label>
+            <input id="contact-name" name="Nom" type="text" placeholder="Votre nom" required />
+
+            <label for="contact-email">Email</label>
+            <input
+              id="contact-email"
+              name="Email"
+              type="email"
+              placeholder="vous@email.com"
+              required
+            />
+
+            <label for="contact-message">Message</label>
+            <textarea
+              id="contact-message"
+              name="Message"
+              rows="5"
+              placeholder="Votre message"
+              required
+            ></textarea>
+
+            <button type="submit">Envoyer le message</button>
+          </form>
+
+          <p class="contact-mail">Email direct : teamspinor@gmail.com</p>
+        </div>
+
+        <aside class="social-card" aria-label="Reseaux sociaux Spinor">
+          <p class="eyebrow">Communaute</p>
+          <h3>Suivez Spinor Padel</h3>
+          <p>Retrouvez nos sorties, coulisses et nouveautés sur les réseaux.</p>
+
+          <div class="social-links">
+            <a
+              href="https://www.instagram.com/spinor_Padel"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram spinor_Padel"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
+                <circle cx="12" cy="12" r="4"></circle>
+                <circle cx="17.4" cy="6.6" r="1"></circle>
+              </svg>
+              <span>Instagram</span>
+              <small>@spinor_Padel</small>
+            </a>
+
+            <a
+              href="https://www.tiktok.com/@Spinor_padel"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="TikTok Spinor_padel"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M16 3c.4 2 1.6 3.6 3.5 4.2V11a8.3 8.3 0 0 1-3.5-1V15a5.5 5.5 0 1 1-4.4-5.4v3.4a2.2 2.2 0 1 0 1.8 2.1V3h2.6Z"></path>
+              </svg>
+              <span>TikTok</span>
+              <small>@Spinor_padel</small>
+            </a>
+
+            <a
+              href="https://www.facebook.com/spinor_padel"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook spinor_padel"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v4h4v-4h3.1l.9-4H13V9c0-.7.3-1 1-1Z"></path>
+              </svg>
+              <span>Facebook</span>
+              <small>spinor_padel</small>
+            </a>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <aside id="cart-panel" class="cart-panel" aria-hidden="true">
+      <div class="cart-header">
+        <h3>Mon panier</h3>
+        <button id="close-cart" class="ghost-button" aria-label="Fermer le panier">
+          Fermer
+        </button>
+      </div>
+
+      <div id="cart-items" class="cart-items"></div>
+
+      <div class="cart-footer">
+        <p>Sous-total</p>
+        <strong id="cart-total">0,00 EUR</strong>
+        <button class="checkout-button">Passer la commande</button>
+      </div>
+    </aside>
+
+    <div id="cart-backdrop" class="cart-backdrop" hidden></div>
+
+    <script src="api-config.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
