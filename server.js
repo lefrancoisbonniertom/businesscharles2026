@@ -12,6 +12,7 @@ const BASE_URL = process.env.BASE_URL || "";
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || BASE_URL || "";
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "";
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || "";
+const PRINTFUL_STORE_ID = process.env.PRINTFUL_STORE_ID || "";
 
 const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
 const app = express();
@@ -155,6 +156,7 @@ async function submitPrintfulOrder(order) {
   const payload = {
     external_id: order.orderRef,
     confirm: true,
+    ...(PRINTFUL_STORE_ID ? { store_id: Number(PRINTFUL_STORE_ID) || PRINTFUL_STORE_ID } : {}),
     recipient: {
       name: order.customerName || "Client Boutique",
       email: order.customerEmail || undefined,
@@ -179,6 +181,19 @@ async function submitPrintfulOrder(order) {
       ],
     })),
   };
+
+  console.log(
+    "Submitting Printful order",
+    JSON.stringify(
+      {
+        orderRef: order.orderRef,
+        storeId: PRINTFUL_STORE_ID || null,
+        itemCount: order.items.length,
+      },
+      null,
+      2
+    )
+  );
 
   await postJson("https://api.printful.com/orders", { Authorization: `Bearer ${token}` }, payload);
 }
@@ -226,10 +241,23 @@ async function buildOrderFromStripeSession(sessionId, fallbackOrderRef) {
 
 async function processFulfillmentForSession(sessionId, orderRef) {
   if (handledCheckoutSessions.has(sessionId)) {
+    console.log("Skipping already handled checkout session", sessionId);
     return;
   }
 
   const order = await buildOrderFromStripeSession(sessionId, orderRef);
+  console.log(
+    "Fulfilling order from Stripe session",
+    JSON.stringify(
+      {
+        sessionId,
+        orderRef: order.orderRef,
+        itemCount: order.items.length,
+      },
+      null,
+      2
+    )
+  );
   await fulfillOrder(order);
   handledCheckoutSessions.add(sessionId);
 }
@@ -300,7 +328,7 @@ app.post(
       try {
         await processFulfillmentForSession(session.id, orderRef);
       } catch (error) {
-        console.error("Fulfillment error:", error);
+        console.error("Fulfillment error:", error?.stack || error?.message || error);
       }
     }
 
