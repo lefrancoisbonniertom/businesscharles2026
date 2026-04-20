@@ -78,10 +78,10 @@ function resolvePrintfulVariant(item) {
       return { syncVariantId: Number(value) };
     }
 
-    return { sku: String(value) };
+    return { externalVariantId: String(value) };
   }
 
-  return { sku: SKU_BY_PRODUCT[item.productId] || item.productId };
+  return null;
 }
 
 function getRequestBaseUrl(req) {
@@ -156,7 +156,6 @@ async function submitPrintfulOrder(order) {
   const payload = {
     external_id: order.orderRef,
     confirm: true,
-    ...(PRINTFUL_STORE_ID ? { store_id: Number(PRINTFUL_STORE_ID) || PRINTFUL_STORE_ID } : {}),
     recipient: {
       name: order.customerName || "Client Boutique",
       email: order.customerEmail || undefined,
@@ -173,12 +172,9 @@ async function submitPrintfulOrder(order) {
       name: item.name,
       quantity: item.quantity,
       retail_price: item.unitPrice.toFixed(2),
-      ...(item.syncVariantId ? { sync_variant_id: item.syncVariantId } : { sku: item.sku }),
-      files: [],
-      options: [
-        { id: "Size", value: item.size },
-        ...(item.color ? [{ id: "Color", value: item.color }] : []),
-      ],
+      ...(item.syncVariantId
+        ? { sync_variant_id: item.syncVariantId }
+        : { external_variant_id: item.externalVariantId }),
     })),
   };
 
@@ -195,14 +191,46 @@ async function submitPrintfulOrder(order) {
     )
   );
 
-  await postJson("https://api.printful.com/orders", { Authorization: `Bearer ${token}` }, payload);
+  await postJson(
+    "https://api.printful.com/orders",
+    {
+      Authorization: `Bearer ${token}`,
+      ...(PRINTFUL_STORE_ID ? { "X-PF-Store-Id": String(PRINTFUL_STORE_ID) } : {}),
+    },
+    payload
+  );
 }
 
 async function fulfillOrder(order) {
-  const items = order.items.map((item) => ({
-    ...item,
-    ...resolvePrintfulVariant(item),
-  }));
+  const items = order.items.map((item) => {
+    const resolvedVariant = resolvePrintfulVariant(item);
+
+    if (!resolvedVariant) {
+      throw new Error(
+        `Aucun identifiant Printful valide pour ${item.productId} (${item.size}${item.color ? `, ${item.color}` : ""}). ` +
+          `Renseigne un sync_variant_id ou un external_variant_id dans PRINTFUL_VARIANT_MAP.`
+      );
+    }
+
+    return {
+      ...item,
+      ...resolvedVariant,
+    };
+  });
+
+  console.log(
+    "Resolved Printful items",
+    JSON.stringify(
+      items.map((item) => ({
+        productId: item.productId,
+        syncVariantId: item.syncVariantId || null,
+        externalVariantId: item.externalVariantId || null,
+        quantity: item.quantity,
+      })),
+      null,
+      2
+    )
+  );
   await submitPrintfulOrder({
     ...order,
     items,
